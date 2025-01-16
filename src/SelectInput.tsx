@@ -75,9 +75,17 @@ function SelectInput<V>({
 	const [rotateIndex, setRotateIndex] = useState(
 		initialIndex > lastIndex ? lastIndex - initialIndex : 0,
 	);
-	const [selectedIndex, setSelectedIndex] = useState(
+	const [selectedIndex, _setSelectedIndex] = useState(
 		initialIndex ? (initialIndex > lastIndex ? lastIndex : initialIndex) : 0,
 	);
+	const [selectedValue, setSelectedValue] = useState(items[selectedIndex]?.value);
+
+
+	function setSelectedIndex(index: number) {
+		_setSelectedIndex(index);
+		setSelectedValue(items[index]?.value);
+	}
+
 	const previousItems = useRef<Array<Item<V>>>(items);
 
 	useEffect(() => {
@@ -88,8 +96,15 @@ function SelectInput<V>({
 			)
 		) {
 			setRotateIndex(0);
-			setSelectedIndex(0);
+
+			const newIdx = items.findIndex(item => item.value === selectedValue);
+			if (newIdx !== -1) {
+				setSelectedIndex(newIdx);
+			} else {
+				setSelectedIndex(0);
+			}
 		}
+
 
 		previousItems.current = items;
 	}, [items]);
