@@ -109,6 +109,12 @@ function SelectInput<V>({
 		previousItems.current = items;
 	}, [items]);
 
+	useEffect(() => {
+		if (typeof onHighlight === 'function') {
+			onHighlight(items[selectedIndex]!);
+		}
+	}, []);
+
 	useInput(
 		useCallback(
 			(input, key) => {
